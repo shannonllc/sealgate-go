@@ -1,0 +1,815 @@
+{
+  "generated_by": "the Node.js SDK (sealgate-server)",
+  "vectors": [
+    {
+      "name": "standard webhooks spec vector",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"test\": 2432232314}",
+      "headers": {
+        "webhook-id": "msg_p5jXN8AQM9LWM0D4loKWxJek",
+        "webhook-timestamp": "1614265330",
+        "webhook-signature": "v1,g0hM9SsE+OTPJTGt/tmIKtSyZlE3uFJELVlNIOLJ1OE="
+      },
+      "now": 1614265330,
+      "expect": {
+        "test": 2432232314
+      }
+    },
+    {
+      "name": "standard webhooks spec vector, wrong signature",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"test\": 2432232314}",
+      "headers": {
+        "webhook-id": "msg_p5jXN8AQM9LWM0D4loKWxJek",
+        "webhook-timestamp": "1614265330",
+        "webhook-signature": "v1,Ceo5qEr07ixe2NLpvHk3FH9bwy/WavXrAFQ/9tdO6mc="
+      },
+      "now": 1614265330,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "signed like SealGate",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922sender001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,39xTwcH4I94p97qVJB9ixGjtV4CHuydVvN26k6bdjmg="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "signed with an HMAC by hand",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "signed by the node sdk",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922nodesdk01",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,IvE3/5JI1YmaifbNPbCTuWvs5qRGT3QqY6S6/TvKQeU="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "secret without whsec_ prefix",
+      "secret": "MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "changed body",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_2\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "trailing space in body",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}} ",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "changed id",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_other",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "changed timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000001",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "wrong secret",
+      "secret": "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk=",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "sender rotation, old secret",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_rot",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,b3SFp5JI5nM5YvI1yHPriHvJ9BbXiSN34XpVJVF6GYc= v1,2gHmfWBU5QHkEAvIgHPR6S9V7UcZqtzBbGDbSpbbxDc="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "sender rotation, new secret",
+      "secret": "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk=",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_rot",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,b3SFp5JI5nM5YvI1yHPriHvJ9BbXiSN34XpVJVF6GYc= v1,2gHmfWBU5QHkEAvIgHPR6S9V7UcZqtzBbGDbSpbbxDc="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "rotation: old first",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,4xDJAk08D5ofwdg6iNFQwxzMXkDm/vxYW66HKkytGMo= v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "rotation: new first",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M= v1,4xDJAk08D5ofwdg6iNFQwxzMXkDm/vxYW66HKkytGMo="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "receiver with several secrets, first matches",
+      "secret": [
+        "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+        "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk="
+      ],
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "receiver with several secrets, second matches",
+      "secret": [
+        "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk=",
+        "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw"
+      ],
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "receiver with several secrets, none matches",
+      "secret": [
+        "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk=",
+        "whsec_C2FVsBQIhrscChlQIMV+b5sSYspob7oD"
+      ],
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "v2 only",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v2,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "empty signature",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,"
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "no comma in signature",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1"
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "garbage signature",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,@@@ nonsense v1"
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "too old",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000301,
+      "expect": null,
+      "error": "Message timestamp too old"
+    },
+    {
+      "name": "just inside tolerance (old)",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000300,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "too new",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1789999699,
+      "expect": null,
+      "error": "Message timestamp too new"
+    },
+    {
+      "name": "just inside tolerance (new)",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1789999700,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "custom tolerance 600",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000500,
+      "tolerance": 600,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "custom tolerance 0",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000001,
+      "tolerance": 0,
+      "expect": null,
+      "error": "Message timestamp too old"
+    },
+    {
+      "name": "custom tolerance 0, same second",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "tolerance": 0,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "missing webhook-id",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Missing required headers"
+    },
+    {
+      "name": "missing webhook-timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Missing required headers"
+    },
+    {
+      "name": "missing webhook-signature",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000"
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Missing required headers"
+    },
+    {
+      "name": "empty webhook-id",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Missing required headers"
+    },
+    {
+      "name": "non-numeric timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "abc",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Invalid webhook-timestamp header"
+    },
+    {
+      "name": "negative timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "-1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Invalid webhook-timestamp header"
+    },
+    {
+      "name": "exponent timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1e9",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Invalid webhook-timestamp header"
+    },
+    {
+      "name": "milliseconds timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Message timestamp too new"
+    },
+    {
+      "name": "huge timestamp",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "99999999999999999999",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Invalid webhook-timestamp header"
+    },
+    {
+      "name": "webhook event",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "webhook event signed like SealGate",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922sender001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,39xTwcH4I94p97qVJB9ixGjtV4CHuydVvN26k6bdjmg="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "webhook event with several secrets",
+      "verify": "webhook",
+      "secret": [
+        "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk=",
+        "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw"
+      ],
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": {
+        "type": "login.succeeded",
+        "timestamp": "2026-09-22T00:00:00.000Z",
+        "data": {
+          "app_id": "app_1",
+          "end_user_id": "eu_1",
+          "external_id": "山田-123",
+          "credential_id": "crd_1"
+        }
+      }
+    },
+    {
+      "name": "webhook event with a bad signature",
+      "verify": "webhook",
+      "secret": "whsec_dGhpcyBpcyBhbm90aGVyIHNlY3JldCBrZXk=",
+      "payload": "{\"type\":\"login.succeeded\",\"timestamp\":\"2026-09-22T00:00:00.000Z\",\"data\":{\"app_id\":\"app_1\",\"end_user_id\":\"eu_1\",\"external_id\":\"山田-123\",\"credential_id\":\"crd_1\"}}",
+      "headers": {
+        "webhook-id": "msg_20260922hmac00001",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,Sdj/FRlrtiR6WAcYg5TQA0yYbEFzWk7jhUUjDw/yw8M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "No matching signature found"
+    },
+    {
+      "name": "not a SealGate event 1",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "[]",
+      "headers": {
+        "webhook-id": "msg_ev0",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,myOwZwOcWTG6zN33JLCjWw/ySnEpG+p3ooNKguKPE+M="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "not a SealGate event 2",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "\"x\"",
+      "headers": {
+        "webhook-id": "msg_ev1",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,uNEkgnAtVKw/psBLA9YQE4885qvW6wE9FaI4n2FlLDA="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "not a SealGate event 3",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "null",
+      "headers": {
+        "webhook-id": "msg_ev2",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,iEQJRJFdlwzR6KTkbo1TBFJeJoMgjLQ5ppfuRZii8b4="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "not a SealGate event 4",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":1,\"data\":{}}",
+      "headers": {
+        "webhook-id": "msg_ev3",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,V4AKfYr9uH8A5WXOwiVVSLpRkuU78EKmVopDlsbkcBU="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "not a SealGate event 5",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"login.succeeded\"}",
+      "headers": {
+        "webhook-id": "msg_ev4",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,duzNs5P5R1RVZF9O7w9ubm6N5hVdGG/OIIoDuNLX6oU="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "not a SealGate event 6",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"x\",\"data\":[]}",
+      "headers": {
+        "webhook-id": "msg_ev5",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,1zryF1tp32rpdzKSfpcRdwL3boCM8+NpcV3CM2aJ5Ns="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "not a SealGate event 7",
+      "verify": "webhook",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "{\"type\":\"x\",\"data\":null}",
+      "headers": {
+        "webhook-id": "msg_ev6",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,XpcTyrJcrdC7rs+ssknnW2uw8EK2sC8weSVbn5EGGyc="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not a SealGate event ({ type, timestamp, data })"
+    },
+    {
+      "name": "signed body that is not JSON",
+      "secret": "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw",
+      "payload": "not json",
+      "headers": {
+        "webhook-id": "msg_notjson",
+        "webhook-timestamp": "1790000000",
+        "webhook-signature": "v1,7iyFZ0+mURKrqkDI//MSTTBj8gKXVlpWl5nG3xrAnpk="
+      },
+      "now": 1790000000,
+      "expect": null,
+      "error": "Payload is not valid JSON"
+    }
+  ]
+}
