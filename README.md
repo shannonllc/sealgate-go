@@ -81,7 +81,7 @@ case sealgate.EventUserDeleted:
 }
 ```
 
-The error matches `sealgate.ErrWebhookVerification` when the signature does not match or the timestamp is more than 5 minutes off (`sealgate.WithTolerance`). Pass `sealgate.WithSecrets(old)` while you switch to a new secret. A redelivery has the same `webhook-id` header. Events: `register.completed`, `register.failed`, `login.succeeded`, `login.failed`, `credential.revoked`, `credential.renamed`, `user.revoked`, `user.deleted` and `recovery.issued` (see `EventData`).
+The error matches `sealgate.ErrWebhookVerification` when the signature does not match or the timestamp is more than 5 minutes off (`sealgate.WithTolerance`). Pass `sealgate.WithSecrets(old)` while you switch to a new secret. A redelivery has the same `webhook-id` header. Events: `register.completed`, `register.failed`, `login.succeeded`, `login.failed`, `credential.revoked`, `credential.renamed`, `user.revoked`, `user.updated`, `user.deleted` and `recovery.issued` (see `EventData`).
 
 ## API
 
@@ -92,6 +92,7 @@ The error matches `sealgate.ErrWebhookVerification` when the signature does not 
 | `Login.Options` | `POST /v1/login/options` |
 | `Login.Verify` | `POST /v1/login/verify` |
 | `Users.ListCredentials` | `GET /v1/users/:external_id/credentials` |
+| `Users.Update` | `PATCH /v1/users/:external_id` |
 | `Users.RenameCredential` | `PATCH /v1/users/:external_id/credentials/:id` |
 | `Users.Revoke` | `POST /v1/users/:external_id/revoke` |
 | `Users.Delete` | `DELETE /v1/users/:external_id` |
@@ -130,6 +131,6 @@ Every error is a `*sealgate.Error` with `Kind`, `Status`, `Code` (the API error 
 
 ## Links
 
-- API reference: https://sealgate.jp/docs
+- API reference: https://sealgate.jp/en/docs
 - Changelog: [CHANGELOG.md](./CHANGELOG.md)
 - License: MIT

@@ -59,6 +59,11 @@ func TestResources(t *testing.T) {
 		check(t, f, "GET", "/v1/users/user%2F1%20%E5%A4%AA%E9%83%8E/credentials", "", "")
 		_, _ = c.Users.RenameCredential(ctx, "u1", "crd_1", &CredentialRenameParams{Name: "Mac"})
 		check(t, f, "PATCH", "/v1/users/u1/credentials/crd_1", "", `{"name":"Mac"}`)
+		u, _ := c.Users.Update(ctx, "u1", &UserUpdateParams{DisplayName: "taro"})
+		if u.EndUserID != "eu_1" {
+			t.Fatal(u)
+		}
+		check(t, f, "PATCH", "/v1/users/u1", "", `{"display_name":"taro"}`)
 		rv, _ := c.Users.Revoke(ctx, "u1")
 		if rv.Revoked != 2 {
 			t.Fatal(rv)

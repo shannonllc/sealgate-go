@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Inputs and results of /v1 (as in the API reference at https://sealgate.jp/docs). Times are ISO 8601 strings.
+// Inputs and results of /v1 (as in the API reference at https://sealgate.jp/en/docs). Times are ISO 8601 strings.
 
 // RegisterOptionsParams starts a registration.
 type RegisterOptionsParams struct {
@@ -111,6 +111,19 @@ type CredentialRevokeResult struct {
 type UserRevokeResult struct {
 	EndUserID string `json:"end_user_id"`
 	Revoked   int    `json:"revoked"`
+}
+
+// UserUpdateParams changes a user's display name.
+type UserUpdateParams struct {
+	// DisplayName is 1 to 64 characters.
+	DisplayName string `json:"display_name"`
+}
+
+// User is a user's stored display name.
+type User struct {
+	EndUserID   string `json:"end_user_id"`
+	ExternalID  string `json:"external_id"`
+	DisplayName string `json:"display_name"`
 }
 
 // UserDeleteResult is the result of deleting a user.

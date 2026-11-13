@@ -69,6 +69,12 @@ func (s *UsersService) ListCredentials(ctx context.Context, externalID string, o
 	return get[CredentialList](ctx, s.c, "/v1/users/"+esc(externalID)+"/credentials", nil, opts)
 }
 
+// Update changes the display name SealGate stores for the user. Registering more passkeys does not change it, and
+// the name already saved with passkeys on the user's devices does not change. 404 when the user does not exist.
+func (s *UsersService) Update(ctx context.Context, externalID string, p *UserUpdateParams, opts ...RequestOption) (*User, error) {
+	return send[User](ctx, s.c, "PATCH", "/v1/users/"+esc(externalID), p, true, opts)
+}
+
 // RenameCredential renames one of the user's passkeys. 404 when it is revoked or belongs to another user.
 func (s *UsersService) RenameCredential(ctx context.Context, externalID, credentialID string, p *CredentialRenameParams, opts ...RequestOption) (*Credential, error) {
 	return send[Credential](ctx, s.c, "PATCH", "/v1/users/"+esc(externalID)+"/credentials/"+esc(credentialID), p, true, opts)

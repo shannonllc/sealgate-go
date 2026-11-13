@@ -16,6 +16,7 @@ const (
 	EventCredentialRevoked EventType = "credential.revoked"
 	EventCredentialRenamed EventType = "credential.renamed"
 	EventUserRevoked       EventType = "user.revoked"
+	EventUserUpdated       EventType = "user.updated"
 	EventUserDeleted       EventType = "user.deleted"
 	EventRecoveryIssued    EventType = "recovery.issued"
 )
@@ -40,6 +41,7 @@ type Event struct {
 //	credential.revoked  EndUserID, CredentialID
 //	credential.renamed  EndUserID, CredentialID (the new name is not included)
 //	user.revoked        EndUserID, Revoked
+//	user.updated        EndUserID (the new display name is not included)
 //	user.deleted        EndUserID, CredentialsDeleted
 //	recovery.issued     ExternalID, Reason
 type EventData struct {
